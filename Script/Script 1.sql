@@ -16,11 +16,31 @@ create table carrera(
     foreign key (id_facultad_carrera) references facultad (id_facultad)
 );
 
+#Crear Tabla Departamento
+create table departamento(
+	id_departamento int not null primary key,
+    nombre_departamento varchar(45) not null
+);
+
+#Crear Tabla Municipio
+create table municipio(
+	id_municipio int not null primary key,
+    nombre_municipio varchar(45) not null,
+    id_departamento_municipio int not null,
+    foreign key (id_departamento_municipio) references departamento (id_departamento)
+);
+
 #Crear Tabla Estudiantes
 create table estudiantes(
 	numero_identificacion bigint not null primary key,
-    semestre tinyint not null,
+	nombre varchar(45) not null,
+    apellido varchar(45)not null,
+    correo varchar(60) not null,
+    telefono bigint,
+    sexo varchar(30),
     id_carrera_estudiante int not null,
+    id_municipio_estudiante int not null,
+    foreign key (id_municipio_estudiante) references municipio (id_municipio),
     foreign key (id_carrera_estudiante) references carrera (id_carrera)
 );
 
@@ -37,6 +57,6 @@ create table votacion(
     fecha_voto datetime not null,
     numero_identificacion_estudiante bigint not null, #Entrada encriptada
     numero_candidato_candidato tinyint not null,
-    foreign key (numero_identificacion_estudiante) references estudiante (numero_identificacion),
-    foreign key (numero_candidato_candidato) references candidato (numero_candidato)
+    foreign key (numero_identificacion_estudiante) references estudiantes (numero_identificacion),
+    foreign key (numero_candidato_candidato) references candidatos (numero_candidato)
 );
