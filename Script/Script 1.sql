@@ -40,6 +40,7 @@ create table estudiantes(
     sexo varchar(30),
     id_carrera_estudiante int not null,
     id_municipio_estudiante int not null,
+    estado varchar(30),
     foreign key (id_municipio_estudiante) references municipio (id_municipio),
     foreign key (id_carrera_estudiante) references carrera (id_carrera)
 );
@@ -48,7 +49,8 @@ create table estudiantes(
 create table candidatos(
 	numero_candidato tinyint not null primary key,
     numero_identificacion bigint not null,
-    fecha_inscripcion datetime
+    fecha_inscripcion datetime,
+    nombre varchar(60)
 );
 
 #Crear Tabla Votacion
