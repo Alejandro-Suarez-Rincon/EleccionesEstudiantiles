@@ -3,24 +3,28 @@ package control;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class estudianteDAO {
+public class UsuarioDAO {
     // Variables
 
     // Metodo Constructor
-    public estudianteDAO() {
+    public UsuarioDAO() {
 
     }
 
     // Metodos Propios
-    public void consultarEstudiante(int numeroIdentificacion, String correo) throws ClassNotFoundException {
-        conexion con = new conexion();
+    public void consultarUsuario(int numeroIdentificacion, String correo) throws ClassNotFoundException {
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
-        String retorno = "";
+        List listaRetorno = new ArrayList();
+        String mensajeRetorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("SELECT * FROM estudiantes WHERE numero_identificacion = ? AND correo = ?");
+            sentencia = con.obtenerConexion().prepareStatement("SELECT * FROM usuario WHERE numero_identificacion = ? AND correo = ?");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setString(2, correo);
 
@@ -33,21 +37,33 @@ public class estudianteDAO {
                 if (idSQL == numeroIdentificacion && correoSQL == correo) {
                     String estadoSQL = rs.getString("estado");
                     if (estadoSQL == "Activo") {
-                        String nombreSQL = rs.getString("nombre");
-                        String apellidoSQL = rs.getString("apellido");
-                        long telefonoSQL = rs.getLong("telefono");
-                        String sexoSQL = rs.getString("sexo");
-                        int idCarreraSQL = rs.getInt("id_carrera_estudiante");
-                        int idMunicipioSQL = rs.getInt("id_municipio_estudiante");
+                        String rolSQL = rs.getString("rol");
+                        if (rolSQL == "Estudiante") {
+                            String nombreSQL = rs.getString("nombre");
+                            String apellidoSQL = rs.getString("apellido");
+                            long telefonoSQL = rs.getLong("telefono");
+                            String sexoSQL = rs.getString("sexo");
+                            int idCarreraSQL = rs.getInt("id_carrera_estudiante");
+                            int idMunicipioSQL = rs.getInt("id_municipio_estudiante");
 
-                        // Ojo con el retorno //
-                        // Usar una lista //
-                        retorno = idSQL + nombreSQL + apellidoSQL + correoSQL + telefonoSQL + sexoSQL + idCarreraSQL + idMunicipioSQL + estadoSQL;
+                            listaRetorno.addAll(Arrays.asList(nombreSQL, apellidoSQL, telefonoSQL, sexoSQL, idCarreraSQL,
+                                    idMunicipioSQL, rolSQL, estadoSQL, correoSQL, idSQL));
+
+                        } else if (rolSQL == "Administrador") {
+                            String nombreSQL = rs.getString("nombre");
+                            String apellidoSQL = rs.getString("apellido");
+                            long telefonoSQL = rs.getLong("telefono");
+                            String sexoSQL = rs.getString("sexo");
+                            listaRetorno.addAll(Arrays.asList(nombreSQL, apellidoSQL, telefonoSQL, sexoSQL, rolSQL,
+                                    estadoSQL, correoSQL, idSQL));
+                        } else {
+                            mensajeRetorno = "No se reconoce el rol.";
+                        }
                     } else {
-                        retorno = "El estudiante no se encuentra activo.";
+                        mensajeRetorno = "El usuario no se encuentra activo.";
                     }
                 } else {
-                    retorno = "No se encontro el estudiante";
+                    mensajeRetorno = "No se encontro el estudiante";
                 }
             }
 
@@ -60,7 +76,7 @@ public class estudianteDAO {
     }
 
     public void desactivarEstudiante(int numeroIdentificacion, String estado) throws ClassNotFoundException {
-        conexion con = new conexion();
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
         try {
@@ -86,7 +102,7 @@ public class estudianteDAO {
     }
 
     public void crearEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado) throws ClassNotFoundException {
-        conexion con = new conexion();
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
@@ -122,7 +138,7 @@ public class estudianteDAO {
     }
 
     public void actualizarEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado) throws ClassNotFoundException {
-        conexion con = new conexion();
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 

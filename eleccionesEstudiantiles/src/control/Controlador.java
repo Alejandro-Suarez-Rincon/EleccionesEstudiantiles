@@ -1,6 +1,6 @@
 package control;
 
 
-public class controlador {
+public class Controlador {
     // Variables
 }

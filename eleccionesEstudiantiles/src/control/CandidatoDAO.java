@@ -5,26 +5,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
-public class candidatoDAO {
+public class CandidatoDAO {
     // Variables
 
     // Metodo Constructor
-    public candidatoDAO() {
+    public CandidatoDAO() {
 
     }
 
     // Metodos Propios
-    public void crearCandidato(int numeroIdentificacion, Timestamp fechaInscripcion, String nombre) throws ClassNotFoundException {
-        conexion con = new conexion();
+    public void crearCandidato(int numeroIdentificacion, Timestamp fechaInscripcion, int idProcesoElectoral) throws ClassNotFoundException {
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_identificacion, fecha_identificacion, nombre) VALUES (?, ?, ?)");
+            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_identificacion, fecha_identificacion," +
+                    " id_proceso_electoral) VALUES (?, ?, ?)");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setTimestamp(2, fechaInscripcion);
-            sentencia.setString(3, nombre);
+            sentencia.setInt(3, idProcesoElectoral);
 
 
             // Reqerieminto SQL
@@ -46,7 +47,7 @@ public class candidatoDAO {
     }
 
     public void consultarCandidato(int numeroCandidato) throws ClassNotFoundException {
-        conexion con = new conexion();
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
@@ -58,10 +59,10 @@ public class candidatoDAO {
             ResultSet rs = sentencia.executeQuery();
 
             while (rs.next()) {
-                int numeroCandidatoSQL = rs.getInt("numero_identificacion");
-                int idCandidatoSQL = rs.getInt("correo");
-                Timestamp fechaInscripcionSQL = rs.getTimestamp("numero_identificacion");
-                String nombre = rs.getString("numero_identificacion");
+                int numeroCandidatoSQL = rs.getInt("numero_candidato");
+                int numeroIdentificacionSQL = rs.getInt("numero_identificacion");
+                Timestamp fechaInscripcionSQL = rs.getTimestamp("fecha_inscripcion");
+                String idProcesoElectoralSQL = rs.getString("id_proceso_electoral");
 
                 // Ver como se mete en una lista //
                 //retorno = numeroCandidatoSQL + idCandidatoSQL + fechaInscripcionSQL + nombre;
@@ -75,17 +76,18 @@ public class candidatoDAO {
         }
     }
 
-    public void actualizarCandidato(int numeroCandidato, int numeroIdentificacion, Timestamp fechaInscripcion, String nombre) throws ClassNotFoundException {
-        conexion con = new conexion();
+    public void actualizarCandidato(int numeroCandidato, int numeroIdentificacion, Timestamp fechaInscripcion, String procesoElectoral) throws ClassNotFoundException {
+        Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidato SET numero_identificacion = ?, fecha_inscripcion = ?, nombre = ? WHERE numero_candidato = ?");
+            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidato SET numero_identificacion = ?," +
+                    " fecha_inscripcion = ?,id_proceso_electoral = ? WHERE numero_candidato = ?");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setTimestamp(2, fechaInscripcion);
-            sentencia.setString(3, nombre);
+            sentencia.setString(3, procesoElectoral);
             sentencia.setInt(4, numeroCandidato);
 
             int actualizado = sentencia.executeUpdate();

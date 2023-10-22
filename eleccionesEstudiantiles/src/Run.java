@@ -1,8 +1,8 @@
-import control.estudianteDAO;
+import control.UsuarioDAO;
 
 public class Run {
     public static void main(String[] args) throws ClassNotFoundException {
-        estudianteDAO es = new estudianteDAO();
+        UsuarioDAO es = new UsuarioDAO();
 
     }
 }
