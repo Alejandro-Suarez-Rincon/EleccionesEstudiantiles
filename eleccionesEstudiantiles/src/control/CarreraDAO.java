@@ -16,7 +16,7 @@ public class CarreraDAO {
     }
 
     // Metodos
-    public void crearCarrera(int idCarrera, int idFacultad, String nombre, String estado) throws ClassNotFoundException {
+    public boolean crearCarrera(int idCarrera, int idFacultad, String nombre, String estado) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -24,7 +24,7 @@ public class CarreraDAO {
         try {
             // Sentencia SQL
             sentencia = con.obtenerConexion().prepareStatement("INSERT INTO carrera (id_carrera, nombre_facultad, " +
-                    "id_facultad_carrera) VALUES (?, ?, ?, ?)");
+                    "id_facultad_carrera, estado) VALUES (?, ?, ?, ?)");
             sentencia.setInt(1, idCarrera);
             sentencia.setString(2, nombre);
             sentencia.setInt(3, idFacultad);
@@ -38,8 +38,10 @@ public class CarreraDAO {
 
             if (creado > 0) {
                 retorno = "Carrera Creado Correctamente.";
+                return true;
             } else {
                 retorno = "No se insertaron datos.";
+                return false;
             }
 
 
@@ -48,7 +50,7 @@ public class CarreraDAO {
         }
     }
 
-    public void actualizarCarrera(int idCarrera, int idFacultad, String nombre) throws ClassNotFoundException {
+    public boolean actualizarCarrera(int idCarrera, int idFacultad, String nombre) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -59,17 +61,22 @@ public class CarreraDAO {
                     "id_facultad_carrera = ? WHERE id_carrera = ?");
             sentencia.setString(1, nombre);
             sentencia.setInt(2, idFacultad);
-            sentencia.setInt(2, idCarrera);
+            sentencia.setInt(3, idCarrera);
 
             int actualizado = sentencia.executeUpdate();
-            if (actualizado > 0) {
-                retorno = "Se actualizo: " + actualizado + " Columnas.";
-            } else {
-                retorno = "No se actualizo correctamente.";
-            }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
+
+            if (actualizado > 0) {
+                retorno = "Se actualizo: " + actualizado + " Columnas.";
+                return true;
+            } else {
+                retorno = "No se actualizo correctamente.";
+                return false;
+            }
+
+
             // return retorno;
 
         } catch (SQLException e) {
@@ -77,7 +84,7 @@ public class CarreraDAO {
         }
     }
 
-    public void consultarCarrera(int idCarrera) throws ClassNotFoundException {
+    public List consultarCarrera(int idCarrera) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
@@ -90,15 +97,16 @@ public class CarreraDAO {
 
             ResultSet rs = sentencia.executeQuery();
             while (rs.next()) {
-                int idCarreraSQL = rs.getInt("id_facultad");
+                int idCarreraSQL = rs.getInt("id_carrera");
                 String nombreSQL = rs.getString("nombre_facultad");
-                int idFacultadSQL = rs.getInt("id_facultad");
+                int idFacultadSQL = rs.getInt("id_facultad_carrera");
                 String estadoSQL = rs.getString("estado");
 
                 listaRetorno.addAll(Arrays.asList(idCarreraSQL, nombreSQL, idFacultadSQL, estadoSQL));
             }
 
             // Retornar lista
+            return listaRetorno;
 
 
         } catch (SQLException e) {
@@ -106,7 +114,7 @@ public class CarreraDAO {
         }
     }
 
-    public void estadoCarrera(int idCarrera, String estado) throws ClassNotFoundException {
+    public boolean estadoCarrera(int idCarrera, String estado) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -118,15 +126,16 @@ public class CarreraDAO {
             sentencia.setInt(2, idCarrera);
 
             int actualizado = sentencia.executeUpdate();
-            if (actualizado > 0) {
-                retorno = "Se actualizo: " + actualizado + " Columnas.";
-            } else {
-                retorno = "No se actualizo correctamente.";
-            }
-
             // Cerrar la coneccion
             con.obtenerConexion().close();
-            // return retorno;
+
+            if (actualizado > 0) {
+                retorno = "Se actualizo: " + actualizado + " Columnas.";
+                return true;
+            } else {
+                retorno = "No se actualizo correctamente.";
+                return false;
+            }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

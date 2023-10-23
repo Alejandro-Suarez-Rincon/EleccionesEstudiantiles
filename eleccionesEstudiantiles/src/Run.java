@@ -1,4 +1,5 @@
 import control.UsuarioDAO;
+import test.TestCarrera;
 import test.TestFacultad;
 import test.TestUsuario;
 
@@ -11,7 +12,7 @@ public class Run {
     }*/
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        TestFacultad ts = new TestFacultad();
-        ts.estado();
+        TestCarrera tc = new TestCarrera();
+        tc.estadoTest();
     }
 }
