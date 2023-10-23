@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class UsuarioDAO {
@@ -16,7 +17,7 @@ public class UsuarioDAO {
     }
 
     // Metodos Propios
-    public void consultarUsuario(int numeroIdentificacion, String correo) throws ClassNotFoundException {
+    public List consultarUsuario(int numeroIdentificacion, String correo) throws ClassNotFoundException, SQLException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
@@ -34,81 +35,80 @@ public class UsuarioDAO {
                 int idSQL = rs.getInt("numero_identificacion");
                 String correoSQL = rs.getString("correo");
 
-                if (idSQL == numeroIdentificacion && correoSQL == correo) {
+                if (idSQL == numeroIdentificacion && correoSQL.equals(correo)) {
                     String estadoSQL = rs.getString("estado");
-                    if (estadoSQL == "Activo") {
+                    if (estadoSQL.equals("ACTIVO")) {
                         String rolSQL = rs.getString("rol");
-                        if (rolSQL == "Estudiante") {
-                            String nombreSQL = rs.getString("nombre");
-                            String apellidoSQL = rs.getString("apellido");
-                            long telefonoSQL = rs.getLong("telefono");
-                            String sexoSQL = rs.getString("sexo");
-                            int idCarreraSQL = rs.getInt("id_carrera_estudiante");
-                            int idMunicipioSQL = rs.getInt("id_municipio_estudiante");
+                        String nombreSQL = rs.getString("nombre");
+                        String apellidoSQL = rs.getString("apellido");
+                        long telefonoSQL = rs.getLong("telefono");
+                        String sexoSQL = rs.getString("sexo");
+                        int idCarreraSQL = rs.getInt("id_carrera_estudiante");
+                        int idMunicipioSQL = rs.getInt("id_municipio_estudiante");
 
-                            listaRetorno.addAll(Arrays.asList(nombreSQL, apellidoSQL, telefonoSQL, sexoSQL, idCarreraSQL,
-                                    idMunicipioSQL, rolSQL, estadoSQL, correoSQL, idSQL));
+                        listaRetorno.add(nombreSQL);
+                        listaRetorno.add(apellidoSQL);
+                        listaRetorno.add(telefonoSQL);
+                        listaRetorno.add(sexoSQL);
+                        listaRetorno.add(idCarreraSQL);
+                        listaRetorno.add(idMunicipioSQL);
+                        listaRetorno.add(rolSQL);
+                        listaRetorno.add(estadoSQL);
+                        listaRetorno.add(correoSQL);
+                        listaRetorno.add(idSQL);
 
-                        } else if (rolSQL == "Administrador") {
-                            String nombreSQL = rs.getString("nombre");
-                            String apellidoSQL = rs.getString("apellido");
-                            long telefonoSQL = rs.getLong("telefono");
-                            String sexoSQL = rs.getString("sexo");
-                            listaRetorno.addAll(Arrays.asList(nombreSQL, apellidoSQL, telefonoSQL, sexoSQL, rolSQL,
-                                    estadoSQL, correoSQL, idSQL));
-                        } else {
-                            mensajeRetorno = "No se reconoce el rol.";
-                        }
+
+                        return listaRetorno;
                     } else {
-                        mensajeRetorno = "El usuario no se encuentra activo.";
+                        return listaRetorno;
                     }
-                } else {
-                    mensajeRetorno = "No se encontro el estudiante";
                 }
             }
-
             // Cerrar la coneccion
             con.obtenerConexion().close();
-
+            return listaRetorno;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void desactivarEstudiante(int numeroIdentificacion, String estado) throws ClassNotFoundException {
+    public boolean desactivarEstudiante(int numeroIdentificacion, String estado) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
+        boolean rtn = false;
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("UPDATE estudiantes SET estado = ? WHERE numero_identificacion = ?");
+            sentencia = con.obtenerConexion().prepareStatement("UPDATE usuario SET estado = ? WHERE numero_identificacion = ?");
             sentencia.setString(1, estado);
             sentencia.setInt(2, numeroIdentificacion);
 
             int actualizado = sentencia.executeUpdate();
             if (actualizado > 0) {
                 retorno = "Se actualizo: " + actualizado + " Columnas.";
+                rtn = true;
             } else {
                 retorno = "No se actualizo correctamente.";
+                rtn = false;
             }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
-            // return retorno;
+            return rtn;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void crearEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado) throws ClassNotFoundException {
+    public boolean crearEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado, String rol) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO estudiantes (numero_identificacion, nombre, apellido, correo, telefono, sexo, id_carrera_estudiante, id_municipio_estudiante, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO usuario (numero_identificacion, nombre, apellido, correo, telefono, sexo, id_carrera_estudiante, id_municipio_estudiante, estado, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setString(2, nombre);
             sentencia.setString(3, apellido);
@@ -118,6 +118,7 @@ public class UsuarioDAO {
             sentencia.setInt(7, idCarrera);
             sentencia.setInt(8, idMunicipio);
             sentencia.setString(9, estado);
+            sentencia.setString(10, rol);
 
             // Reqerieminto SQL
             int creado = sentencia.executeUpdate();
@@ -127,24 +128,27 @@ public class UsuarioDAO {
 
             if (creado > 0) {
                 retorno = "Estudiente Creado Correctamente.";
+                return true;
             } else {
                 retorno = "No se insertaron datos.";
+                return false;
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 
-    public void actualizarEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado) throws ClassNotFoundException {
+    public boolean actualizarEstudiante(int numeroIdentificacion, String nombre, String apellido, String correo, long telefono, String sexo, int idCarrera, int idMunicipio, String estado, String rol) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
+        boolean rtn = false;
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("UPDATE estudiantes SET nombre = ?, apellido = ?, correo = ?, telefono = ?, sexo = ?, id_carrera_estudiante = ?, id_municipio_estudiante = ?, estado = ? WHERE numero_identificacion = ?");
+            sentencia = con.obtenerConexion().prepareStatement("UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, telefono = ?, sexo = ?, id_carrera_estudiante = ?, id_municipio_estudiante = ?, estado = ?, rol = ? WHERE numero_identificacion = ?");
             sentencia.setString(1, nombre);
             sentencia.setString(2, apellido);
             sentencia.setString(3, correo);
@@ -153,18 +157,22 @@ public class UsuarioDAO {
             sentencia.setInt(6, idCarrera);
             sentencia.setInt(7, idMunicipio);
             sentencia.setString(8, estado);
-            sentencia.setInt(9, numeroIdentificacion);
+            sentencia.setString(9, rol);
+            sentencia.setInt(10, numeroIdentificacion);
+
 
             int actualizado = sentencia.executeUpdate();
             if (actualizado > 0) {
                 retorno = "Se actualizo: " + actualizado + " Columnas.";
+                rtn = true;
             } else {
                 retorno = "No se actualizo correctamente.";
+                rtn = false;
             }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
-            // return retorno;
+            return rtn;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
