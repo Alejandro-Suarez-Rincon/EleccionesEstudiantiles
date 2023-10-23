@@ -4,9 +4,9 @@ import model.CarreraDTO;
 
 public class TestCarrera {
     // variables
-    int idCarrera = 0;
+    int idCarrera = 2;
     int idFacultad = 0;
-    String nombre = "Ingenieria de Sistemas";
+    String nombre = "Ingenieria Ambiental";
     String estado = "ACTIVA";
     CarreraDTO carrera = new CarreraDTO(idCarrera, idFacultad, nombre, estado);
 

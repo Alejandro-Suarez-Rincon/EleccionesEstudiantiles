@@ -1,6 +1,7 @@
 package model;
 
 import control.CarreraDAO;
+import control.FacultadDAO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,14 +24,27 @@ public class CarreraDTO {
 
     // Metodos
     public void crearCarrera() throws ClassNotFoundException {
-        boolean crear = carrera.crearCarrera(idCarrera, idFacultad, nombre, estado);
+        FacultadDAO facultad = new FacultadDAO();
+        List consultar = new ArrayList<>();
+        consultar = facultad.consultarFacultad(idFacultad);
 
-        if (crear) {
-            // vista creada
-            System.out.println("Si");
+        if (consultar.isEmpty()) {
+            // vista no se encuentra la facultad
+            System.out.println("no se encuentra la facultad");
+        } else if (consultar.get(2).equals("ACTIVA")) {
+            // se hace la creacion
+            boolean crear = carrera.crearCarrera(idCarrera, idFacultad, nombre, estado);
+
+            if (crear) {
+                // vista creada
+                System.out.println("Si");
+            } else {
+                // vista no creada
+                System.out.println("No");
+            }
         } else {
-            // vista no creada
-            System.out.println("No");
+            // vista no se crea por no estar activada la facultad
+            System.out.println("facultad no activa");
         }
     }
 

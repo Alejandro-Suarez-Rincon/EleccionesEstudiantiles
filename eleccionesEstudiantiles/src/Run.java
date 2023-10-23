@@ -13,6 +13,6 @@ public class Run {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         TestCarrera tc = new TestCarrera();
-        tc.estadoTest();
+        tc.crear();
     }
 }
