@@ -42,9 +42,9 @@ public class UsuarioDTO {
         boolean usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
                 estado, rol);
 
-        if(usr){
+        if (usr) {
             System.out.println("Si");
-        }else{
+        } else {
             System.out.println("No");
         }
 
@@ -57,9 +57,9 @@ public class UsuarioDTO {
 
         boolean usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
                 estado, rol);
-        if(usr){
+        if (usr) {
             System.out.println("Si");
-        }else{
+        } else {
             System.out.println("No");
         }
 
@@ -70,15 +70,15 @@ public class UsuarioDTO {
         List lista = new ArrayList<>();
         lista = usuario.consultarUsuario(numeroIdentificacion, correo);
 
-        if (lista.size() == 0){
+        if (lista.isEmpty()) {
             // mensaje no se encontro el usuario
             System.out.println("No se encuentra");
 
-        } else if(lista.get(6).equals("ESTUDIANTE")){
+        } else if (lista.get(6).equals("ESTUDIANTE")) {
             // ir a vista Estudiante
             System.out.println("ESTUDIANTE");
 
-        }else if (lista.get(6).equals("ADMIN")){
+        } else if (lista.get(6).equals("ADMIN")) {
             // ir a vista ADMIN
             System.out.println("ADMIN");
         }
@@ -88,7 +88,7 @@ public class UsuarioDTO {
     public void desactivarEstudiante() throws ClassNotFoundException {
         boolean desactivar;
         desactivar = usuario.desactivarEstudiante(numeroIdentificacion, estado);
-        if (desactivar == true) {
+        if (desactivar) {
             // ir a vista de que si
             System.out.println("Si");
         } else {
@@ -102,7 +102,7 @@ public class UsuarioDTO {
         actualizar = usuario.actualizarEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo,
                 idCarrera, idMunicipio, estado, rol);
 
-        if (actualizar == true) {
+        if (actualizar) {
             // ir a vista de que si
             System.out.println("Si");
         } else {

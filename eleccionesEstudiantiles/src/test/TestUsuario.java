@@ -19,8 +19,9 @@ public class TestUsuario {
 
     UsuarioDTO usuario = new UsuarioDTO(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico,
             sexo, estado, idCarrera, idMunicipio, rol);
+
     // Constructor
-    public TestUsuario(){
+    public TestUsuario() {
 
     }
 

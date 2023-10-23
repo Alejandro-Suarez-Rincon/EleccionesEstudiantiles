@@ -16,7 +16,7 @@ public class FacultadDAO {
     }
 
     // Metodos
-    public void crearFacultad(int idFacultad, String nombre, String estado) throws ClassNotFoundException {
+    public boolean crearFacultad(int idFacultad, String nombre, String estado) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -37,8 +37,10 @@ public class FacultadDAO {
 
             if (creado > 0) {
                 retorno = "Facultad Creado Correctamente.";
+                return true;
             } else {
                 retorno = "No se insertaron datos.";
+                return false;
             }
 
 
@@ -47,7 +49,7 @@ public class FacultadDAO {
         }
     }
 
-    public void actualizarFacultad(int idFacultad, String nombre) throws ClassNotFoundException {
+    public boolean actualizarFacultad(int idFacultad, String nombre) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -61,13 +63,15 @@ public class FacultadDAO {
             int actualizado = sentencia.executeUpdate();
             if (actualizado > 0) {
                 retorno = "Se actualizo: " + actualizado + " Columnas.";
+                // Cerrar la coneccion
+                con.obtenerConexion().close();
+                return true;
             } else {
                 retorno = "No se actualizo correctamente.";
+                // Cerrar la coneccion
+                con.obtenerConexion().close();
+                return false;
             }
-
-            // Cerrar la coneccion
-            con.obtenerConexion().close();
-            // return retorno;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -75,7 +79,7 @@ public class FacultadDAO {
 
     }
 
-    public void consultarFacultad(int idFacultad) throws ClassNotFoundException {
+    public List consultarFacultad(int idFacultad) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
@@ -95,15 +99,14 @@ public class FacultadDAO {
                 listaRetorno.addAll(Arrays.asList(idFacultadSQL, nombreSQL, estadoSQL));
             }
 
-            // Retornar lista
-
+            return listaRetorno;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void estadoFacultad(int idFacultad, String estado) throws ClassNotFoundException {
+    public boolean estadoFacultad(int idFacultad, String estado) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -117,12 +120,18 @@ public class FacultadDAO {
             int actualizado = sentencia.executeUpdate();
             if (actualizado > 0) {
                 retorno = "Se actualizo: " + actualizado + " Columnas.";
+                // Cerrar la coneccion
+                con.obtenerConexion().close();
+                return true;
+
             } else {
                 retorno = "No se actualizo correctamente.";
+                // Cerrar la coneccion
+                con.obtenerConexion().close();
+                return false;
             }
 
-            // Cerrar la coneccion
-            con.obtenerConexion().close();
+
             // return retorno;
 
         } catch (SQLException e) {
