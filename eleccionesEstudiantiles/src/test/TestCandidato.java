@@ -25,10 +25,10 @@ public class TestCandidato {
 
     public void consultar() throws ClassNotFoundException {
         candidato.consultarCandidato();
-    }
+    } // PASS
 
     public void actualizar() throws ClassNotFoundException {
         candidato.actualizarCandidato();
-    }
+    } // PASS
 
 }

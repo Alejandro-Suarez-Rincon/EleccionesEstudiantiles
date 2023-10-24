@@ -17,14 +17,14 @@ public class VotacionDAO {
     }
 
     // Metodos Propios
-    public void consultarVotacion(int numeroCandidato) throws ClassNotFoundException {
+    public List consultarVotacion(int numeroCandidato) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("SELECT * FROM votacion WHERE numero_candidato = ?");
+            sentencia = con.obtenerConexion().prepareStatement("SELECT * FROM votacion WHERE numero_candidato_candidato = ?");
             sentencia.setInt(1, numeroCandidato);
 
             ResultSet rs = sentencia.executeQuery();
@@ -43,18 +43,20 @@ public class VotacionDAO {
             // Cerrar la coneccion
             con.obtenerConexion().close();
 
+            return listaRetorno;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public void crearVotacion(int idVotacion, Timestamp fechaVoto, int numeroIdentificacion, int numeroCandidato) throws ClassNotFoundException {
+    public boolean crearVotacion(Timestamp fechaVoto, int numeroIdentificacion, int numeroCandidato) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
-        try{
+        try {
             // sentencia SQL
             sentencia = con.obtenerConexion().prepareStatement("INSERT INTO votacion (fecha_voto, numero_identificacion_estudiante, " +
                     "numero_candidato_candidato) VALUES (?, ?, ?)");
@@ -70,16 +72,18 @@ public class VotacionDAO {
 
             if (creado > 0) {
                 retorno = "voto creado correctamente.";
+                return true;
             } else {
                 retorno = "No se pudo crear.";
+                return false;
             }
 
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException();
         }
     }
 
-    public void buscarVotacion(int numeroIdentificacion) throws ClassNotFoundException {
+    public List buscarVotacion(int numeroIdentificacion) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
@@ -91,9 +95,9 @@ public class VotacionDAO {
 
             ResultSet rs = sentencia.executeQuery();
 
-            if (rs.next()){
+            if (rs.next()) {
                 int numeroIdentificacionSQL = rs.getInt("numero_identificacion_estudiante");
-                if (numeroIdentificacionSQL == numeroIdentificacion){
+                if (numeroIdentificacionSQL == numeroIdentificacion) {
                     listaRetorno.add(numeroIdentificacionSQL);
                 }
             }
@@ -102,6 +106,7 @@ public class VotacionDAO {
             con.obtenerConexion().close();
 
             // Hacer el retorno aqui
+            return listaRetorno;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
