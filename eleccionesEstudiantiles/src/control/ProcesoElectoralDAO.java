@@ -17,7 +17,7 @@ public class ProcesoElectoralDAO {
     }
 
     // Metodos
-    public void crearProceso(int idProceso, String descripcion, Timestamp fechaEleccion, Timestamp fechaCreacion, Timestamp fechaFinalizacion) throws ClassNotFoundException {
+    public boolean crearProceso(int idProceso, String descripcion, Timestamp fechaEleccion, String fechaCreacion, Timestamp fechaFinalizacion) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -29,8 +29,8 @@ public class ProcesoElectoralDAO {
             sentencia.setInt(1, idProceso);
             sentencia.setString(2, descripcion);
             sentencia.setTimestamp(3, fechaEleccion);
-            sentencia.setTimestamp(4, fechaCreacion);
-            sentencia.setTimestamp(4, fechaFinalizacion);
+            sentencia.setString(4, fechaCreacion);
+            sentencia.setTimestamp(5, fechaFinalizacion);
 
             // Reqerieminto SQL
             int creado = sentencia.executeUpdate();
@@ -40,8 +40,10 @@ public class ProcesoElectoralDAO {
 
             if (creado > 0) {
                 retorno = "proceso Creado Correctamente.";
+                return true;
             } else {
                 retorno = "No se insertaron datos.";
+                return false;
             }
 
 
@@ -50,7 +52,7 @@ public class ProcesoElectoralDAO {
         }
     }
 
-    public void actualizarProceso(int idProceso, String descripcion, Timestamp fechaEleccion, Timestamp fechaFinalizacion) throws ClassNotFoundException {
+    public boolean actualizarProceso(int idProceso, String descripcion, Timestamp fechaEleccion, Timestamp fechaFinalizacion) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -65,14 +67,19 @@ public class ProcesoElectoralDAO {
             sentencia.setInt(4, idProceso);
 
             int actualizado = sentencia.executeUpdate();
-            if (actualizado > 0) {
-                retorno = "Se actualizo: " + actualizado + " Columnas.";
-            } else {
-                retorno = "No se actualizo correctamente.";
-            }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
+
+            if (actualizado > 0) {
+                retorno = "Se actualizo: " + actualizado + " Columnas.";
+                return true;
+            } else {
+                retorno = "No se actualizo correctamente.";
+                return false;
+            }
+
+
             // return retorno;
 
         } catch (SQLException e) {
@@ -80,7 +87,7 @@ public class ProcesoElectoralDAO {
         }
     }
 
-    public void consultarProceso(int idProceso) throws ClassNotFoundException {
+    public List consultarProceso(int idProceso) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         List listaRetorno = new ArrayList();
@@ -92,7 +99,7 @@ public class ProcesoElectoralDAO {
             sentencia.setInt(1, idProceso);
 
             ResultSet rs = sentencia.executeQuery();
-            while (rs.next()){
+            while (rs.next()) {
                 int idProcesoSQL = rs.getInt("id_proceso");
                 String descripcionSQL = rs.getString("descripcion");
                 Timestamp fechaEleccionSQL = rs.getTimestamp("fecha_eleccion");
@@ -103,7 +110,7 @@ public class ProcesoElectoralDAO {
             }
 
             // Retornar lista
-
+            return listaRetorno;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
