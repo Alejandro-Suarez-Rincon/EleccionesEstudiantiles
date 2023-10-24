@@ -7,12 +7,12 @@ public class ReportesDAO {
     // variables
 
     // constructor
-    public ReportesDAO(){
+    public ReportesDAO() {
 
     }
 
     // Metodos
-    public void crearReporte(int idProcesoElectoral, int idVotacion) throws ClassNotFoundException {
+    public boolean crearReporte(int idProcesoElectoral, int idVotacion) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
@@ -33,8 +33,10 @@ public class ReportesDAO {
 
             if (creado > 0) {
                 retorno = "Candidato creado correctamente.";
+                return true;
             } else {
                 retorno = "No se pudo crear.";
+                return false;
             }
 
 
