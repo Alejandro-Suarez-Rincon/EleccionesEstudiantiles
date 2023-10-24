@@ -4,6 +4,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CandidatoDAO {
     // Variables
@@ -14,18 +17,19 @@ public class CandidatoDAO {
     }
 
     // Metodos Propios
-    public void crearCandidato(int numeroIdentificacion, Timestamp fechaInscripcion, int idProcesoElectoral) throws ClassNotFoundException {
+    public boolean crearCandidato(int numeroCandidato, int numeroIdentificacion, Timestamp fechaInscripcion, int idProcesoElectoral) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_identificacion, fecha_identificacion," +
-                    " id_proceso_electoral) VALUES (?, ?, ?)");
-            sentencia.setInt(1, numeroIdentificacion);
-            sentencia.setTimestamp(2, fechaInscripcion);
-            sentencia.setInt(3, idProcesoElectoral);
+            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_candidato, numero_identificacion, fecha_inscripcion," +
+                    " id_proceso_electoral) VALUES (?, ?, ?, ?)");
+            sentencia.setInt(1, numeroCandidato);
+            sentencia.setInt(2, numeroIdentificacion);
+            sentencia.setTimestamp(3, fechaInscripcion);
+            sentencia.setInt(4, idProcesoElectoral);
 
 
             // Reqerieminto SQL
@@ -36,8 +40,10 @@ public class CandidatoDAO {
 
             if (creado > 0) {
                 retorno = "Candidato creado correctamente.";
+                return true;
             } else {
                 retorno = "No se pudo crear.";
+                return false;
             }
 
 
@@ -46,10 +52,10 @@ public class CandidatoDAO {
         }
     }
 
-    public void consultarCandidato(int numeroCandidato) throws ClassNotFoundException {
+    public List consultarCandidato(int numeroCandidato) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
-        String retorno = "";
+        List listaRetorno = new ArrayList();
 
         try {
             // Sentencia SQL
@@ -65,40 +71,48 @@ public class CandidatoDAO {
                 String idProcesoElectoralSQL = rs.getString("id_proceso_electoral");
 
                 // Ver como se mete en una lista //
+                listaRetorno.addAll(Arrays.asList(numeroCandidatoSQL, numeroIdentificacionSQL, fechaInscripcionSQL, idProcesoElectoralSQL));
                 //retorno = numeroCandidatoSQL + idCandidatoSQL + fechaInscripcionSQL + nombre;
             }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
 
+            return listaRetorno;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void actualizarCandidato(int numeroCandidato, int numeroIdentificacion, Timestamp fechaInscripcion, String procesoElectoral) throws ClassNotFoundException {
+    public boolean actualizarCandidato(int numeroCandidato, int numeroIdentificacion, Timestamp fechaInscripcion, int idProcesoElectoral) throws ClassNotFoundException {
         Conexion con = new Conexion();
         PreparedStatement sentencia = null;
         String retorno = "";
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidato SET numero_identificacion = ?," +
+            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidatos SET numero_identificacion = ?," +
                     " fecha_inscripcion = ?,id_proceso_electoral = ? WHERE numero_candidato = ?");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setTimestamp(2, fechaInscripcion);
-            sentencia.setString(3, procesoElectoral);
+            sentencia.setInt(3, idProcesoElectoral);
             sentencia.setInt(4, numeroCandidato);
 
             int actualizado = sentencia.executeUpdate();
-            if (actualizado > 0) {
-                retorno = "Se actualizo: " + actualizado + " Columnas.";
-            } else {
-                retorno = "No se actualizo correctamente.";
-            }
 
             // Cerrar la coneccion
             con.obtenerConexion().close();
+
+            if (actualizado > 0) {
+                retorno = "Se actualizo: " + actualizado + " Columnas.";
+                return true;
+            } else {
+                retorno = "No se actualizo correctamente.";
+                return false;
+            }
+
+
             // return retorno;
 
         } catch (SQLException e) {

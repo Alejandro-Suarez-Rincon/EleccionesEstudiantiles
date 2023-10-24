@@ -1,3 +1,4 @@
+import test.TestCandidato;
 import test.TestProcesoElectoral;
 
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ public class Run {
     }*/
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        TestProcesoElectoral tc = new TestProcesoElectoral();
-        tc.consultar();
+        TestCandidato tc = new TestCandidato();
+        tc.actualizar();
     }
 }
