@@ -1,0 +1,126 @@
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    height: 100vh;
+}
+
+.Login{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    background:#cecdcd ;
+    border-radius: 12px;
+}
+
+.Login h1{
+    text-align: center;
+    padding: 0 0 20px 0;
+}
+
+.Login form{
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+form.correo{
+    position: relative;
+    border-bottom: 2px solid #ffffff;
+    margin: 30px;
+}
+
+.correo input{
+    width: 100px;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+.correo label{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #ffffff;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.correo span::before{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #e56cf5;
+    transition: .5s;
+}
+
+.correo input:focus ~ label{
+    top: -5px;
+    color: #e56cf5;
+}
+
+.correo input:focus ~ span::before{
+    width: 100%;
+}
+
+.recordar:hover{
+    text-decoration: underline;
+}
+
+
+form.numeroIdentificacion{
+    position: relative;
+    border-bottom: 2px solid #ffffff;
+    margin: 30px;
+}
+
+.numeroIdentificacion input{
+    width: 100px;
+    padding: 0 5px;
+    height: 40px;
+    font-size: 16px;
+    border: #000000;
+    background: none;
+    outline: none;
+}
+
+.numeroIdentificacion label{
+    position: absolute;
+    top: 70%;
+    left: 5px;
+    color: #ffffff;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.numeroIdentificacion::before{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #e56cf5;
+    transition: .5s;
+}
+
+.numeroIdentificacion input:focus ~ label{
+    top: -5px;
+    color: #e56cf5;
+}
+
+.numeroIdentificacion input:focus ~ span::before{
+    width: 100%;
+}
