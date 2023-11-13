@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+
+            <div class="logo">Menu</div>
+
+            <input type="checkbox" id="toggle">
+            <label for="toggle"><img src="img/menu.svg" alt="menu"></label>
+
+            <nav class="navegacion">
+
+                <ul>
+                    <li><a href="#">Estudiantes</a></li>
+                    <li><a href="#">Facultad</a></li>
+                    <li><a href="#">Carrera</a></li>
+                    <li><a href="#">Proceso Electoral</a></li>
+                    <li><a href="#">Votacion</a></li>
+                        <ul>
+                            <li>><a href="#">Crear</a></li>
+                        </ul>
+                </ul>
+
+            </nav>
+
+    </header>
+    <div class="UsuarioCrear">
+        <h1>Registrar Usuario</h1>
+        <form method="get">
+
+            <div class="numeroIdentificacion">
+                <input type="password" required>
+                <label>Número Identificacion</label>
+            </div>
+
+            <div class="nombre">
+                <input type="text" required>
+                <label>Nombre</label>
+            </div>
+
+            <div class="apellido">
+                <input type="text" required>
+                <label>Apellido</label>
+            </div>
+
+            <div class="correo">
+                <input type="text" required>
+                <label>Correo electronico</label>
+            </div>
+
+            <div class="numeroTelefonico">
+                <input type="text" required>
+                <label>Numero de Telefono</label>
+            </div>
+
+            <div class="radio">
+                <fieldset>
+                    <label>Sexo</label><br>
+                    <input type="radio" name="Sexo" value="femenino">
+                    <label for="femenino">Femenino</label>
+
+                    <input type="radio" name="Sexo" value="masculino">
+                    <label for="masculino">Masculino</label>
+                </fieldset>
+            </div>
+
+            <div class="radio">
+                <fieldset>
+                    <label>Estado</label><br>
+                    <input type="radio" name="Estado" value="activo">
+                    <label for="activo">Activo</label>
+
+                    <input type="radio" name="Estado" value="inactivo">
+                    <label for="inactivo">Inactivo</label>
+                
+                </fieldset>
+            </div>
+
+            <div class="idCarrera">
+                <input type="text" required>
+                <label>id de la Carrera</label>
+            </div>
+
+            <div class="idMunicipio">
+                <input type="text" required>
+                <label>id del Municipio</label>
+            </div>
+          
+            <input type="submit" value="Crear">
+        </form>
+
+        <script></script>
+
+
+    </div>
+</body>
+</html>
