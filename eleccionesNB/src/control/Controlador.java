@@ -15,9 +15,9 @@ public class Controlador {
         PaginaInicial paginaInicial = new PaginaInicial();
         paginaInicial.setVisible(true);
     }
-    
-    public void Logueo(){
-        
+
+    public void Logueo() {
+
     }
 
 }

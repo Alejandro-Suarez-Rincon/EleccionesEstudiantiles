@@ -8,15 +8,14 @@ package view;
  *
  * @author aleja
  */
-public class PaginaInicial extends javax.swing.JFrame {
+public class UsuarioInicio extends javax.swing.JFrame {
 
     /**
-     * Creates new form PaginaInicial
+     * Creates new form UsuarioInicio
      */
-    public PaginaInicial() {
+    public UsuarioInicio() {
         initComponents();
         this.setLocationRelativeTo(null);// Centra la pantalla
-
     }
 
     /**
@@ -29,30 +28,22 @@ public class PaginaInicial extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        botonConteo = new javax.swing.JButton();
-        botonInicioSesion = new javax.swing.JButton();
+        botonVotar = new javax.swing.JButton();
+        botonInscribirse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Votacion Estudiantil");
-        setAutoRequestFocus(false);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Elecciones Estudiantiles");
-
-        botonConteo.setText("Conteo");
-        botonConteo.setToolTipText("");
-        botonConteo.addActionListener(new java.awt.event.ActionListener() {
+        botonVotar.setText("Votar");
+        botonVotar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonConteoActionPerformed(evt);
+                botonVotarActionPerformed(evt);
             }
         });
 
-        botonInicioSesion.setText("Iniciar Sesion");
-        botonInicioSesion.addActionListener(new java.awt.event.ActionListener() {
+        botonInscribirse.setText("Instribirse");
+        botonInscribirse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonInicioSesionActionPerformed(evt);
+                botonInscribirseActionPerformed(evt);
             }
         });
 
@@ -60,26 +51,21 @@ public class PaginaInicial extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(250, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(botonConteo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(botonInicioSesion))
-                    .addComponent(jLabel1))
-                .addGap(228, 228, 228))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(botonVotar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
+                .addComponent(botonInscribirse)
+                .addGap(98, 98, 98))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addComponent(jLabel1)
-                .addGap(150, 150, 150)
+                .addGap(121, 121, 121)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(botonConteo)
-                    .addComponent(botonInicioSesion))
-                .addContainerGap(239, Short.MAX_VALUE))
+                    .addComponent(botonVotar)
+                    .addComponent(botonInscribirse))
+                .addContainerGap(374, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -96,22 +82,20 @@ public class PaginaInicial extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void botonInicioSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonInicioSesionActionPerformed
-        this.setVisible(false);
-        Login login = new Login();
-        login.setVisible(true);
-
-    }//GEN-LAST:event_botonInicioSesionActionPerformed
-
-    private void botonConteoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConteoActionPerformed
+    private void botonVotarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonVotarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_botonConteoActionPerformed
+    }//GEN-LAST:event_botonVotarActionPerformed
+
+    private void botonInscribirseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonInscribirseActionPerformed
+        UsuarioInscripcion usuarioInscripcion = new UsuarioInscripcion();
+        usuarioInscripcion.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonInscribirseActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton botonConteo;
-    private javax.swing.JButton botonInicioSesion;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton botonInscribirse;
+    private javax.swing.JButton botonVotar;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

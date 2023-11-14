@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CandidatoDTO {
+
     // variables
     int numeroIdentificacion;
     int idProcesoElectoral;
@@ -17,7 +18,7 @@ public class CandidatoDTO {
 
     // constructor
     public CandidatoDTO(int numeroIdentificacion, int idProcesoElectoral, int numeroCandidato,
-                        Timestamp fechaInscripcion) {
+            Timestamp fechaInscripcion) {
         this.numeroIdentificacion = numeroIdentificacion;
         this.idProcesoElectoral = idProcesoElectoral;
         this.numeroCandidato = numeroCandidato;
@@ -25,39 +26,31 @@ public class CandidatoDTO {
     }
 
     // Metodos
-    public void crearCandidato() throws ClassNotFoundException {
+    public String crearCandidato() throws ClassNotFoundException {
         boolean crear = candidato.crearCandidato(numeroCandidato, numeroIdentificacion, fechaInscripcion, idProcesoElectoral);
         if (crear) {
             // vista creado
-            System.out.println("Si");
+            return "Candidato Creado";
         } else {
             // vista no creada
-            System.out.println("No");
+            return "No se creo el candidato";
         }
     }
 
-    public void consultarCandidato() throws ClassNotFoundException {
+    public List consultarCandidato() throws ClassNotFoundException {
         List lista = new ArrayList();
-        lista = candidato.consultarCandidato(numeroCandidato);
-
-        if (lista.isEmpty()) {
-            // vista no se encuentra candidato
-            System.out.println("No se encuentra");
-        } else {
-            // vista impresion informacion
-            System.out.println(lista);
-        }
+        return lista = candidato.consultarCandidato(numeroCandidato);
     }
 
-    public void actualizarCandidato() throws ClassNotFoundException {
+    public String actualizarCandidato() throws ClassNotFoundException {
         boolean actualizar = candidato.actualizarCandidato(numeroCandidato, numeroIdentificacion, fechaInscripcion, idProcesoElectoral);
 
         if (actualizar) {
             // vista actualizado
-            System.out.println("Si");
+            return "Candidato Actualizado";
         } else {
             // vista no actualizada
-            System.out.println("No");
+            return "No se pudo actualizar el candidato";
         }
     }
 

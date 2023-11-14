@@ -24,13 +24,12 @@ public class CandidatoDAO {
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_candidato, numero_identificacion, fecha_inscripcion," +
-                    " id_proceso_electoral) VALUES (?, ?, ?, ?)");
+            sentencia = con.obtenerConexion().prepareStatement("INSERT INTO candidatos (numero_candidato, numero_identificacion, fecha_inscripcion,"
+                    + " id_proceso_electoral) VALUES (?, ?, ?, ?)");
             sentencia.setInt(1, numeroCandidato);
             sentencia.setInt(2, numeroIdentificacion);
             sentencia.setTimestamp(3, fechaInscripcion);
             sentencia.setInt(4, idProcesoElectoral);
-
 
             // Reqerieminto SQL
             int creado = sentencia.executeUpdate();
@@ -45,7 +44,6 @@ public class CandidatoDAO {
                 retorno = "No se pudo crear.";
                 return false;
             }
-
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -92,8 +90,8 @@ public class CandidatoDAO {
 
         try {
             // Sentencia SQL
-            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidatos SET numero_identificacion = ?," +
-                    " fecha_inscripcion = ?,id_proceso_electoral = ? WHERE numero_candidato = ?");
+            sentencia = con.obtenerConexion().prepareStatement("UPDATE candidatos SET numero_identificacion = ?,"
+                    + " fecha_inscripcion = ?,id_proceso_electoral = ? WHERE numero_candidato = ?");
             sentencia.setInt(1, numeroIdentificacion);
             sentencia.setTimestamp(2, fechaInscripcion);
             sentencia.setInt(3, idProcesoElectoral);
@@ -112,12 +110,9 @@ public class CandidatoDAO {
                 return false;
             }
 
-
             // return retorno;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 }
-
