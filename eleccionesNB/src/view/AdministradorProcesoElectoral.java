@@ -15,8 +15,6 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.ProcesoElectoralDTO;
 
-
-
 /**
  *
  * @author aleja
@@ -591,8 +589,8 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
         mensaje = procesoElectoralDTO.actualizarProceso();
         JOptionPane.showMessageDialog(null, mensaje);
     }
-    
-    public void consultarProceso(){
+
+    public void consultarProceso() {
         int idProceso = Integer.valueOf(idProcesoConsulta.getText());
         ProcesoElectoralDTO procesoElectoralDTO = new ProcesoElectoralDTO(idProceso, "", null, "", null);
 
@@ -609,9 +607,9 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No se encuentra el proceso");
         } else {
             // enseñar datos
-            
+
             JOptionPane.showMessageDialog(null, lista);
-            
+
             /*int idProcesoLista = (int) lista.get(0);
             String nombre = (String) lista.get(1);
             Timestamp fechaEleccion = (Timestamp) lista.get(2);
@@ -629,7 +627,7 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
             fechaFinalizacion.setText(fechaFinalizacionString);*/
         }
     }
-    
+
     // Método para convertir un Timestamp a String
     private static String convertirTimestampAString(Timestamp timestamp) {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
