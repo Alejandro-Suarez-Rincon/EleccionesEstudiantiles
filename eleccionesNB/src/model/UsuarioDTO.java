@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDTO {
+
     // Variables
     private int numeroIdentificacion;
     private String nombre;
@@ -22,7 +23,7 @@ public class UsuarioDTO {
 
     // Metodo Constructor
     public UsuarioDTO(int numeroIdentificacion, String nombre, String apellido, String correo, int numeroTelefonico,
-                      String sexo, String estado, int idCarrera, int idMunicipio, String rol) {
+            String sexo, String estado, int idCarrera, int idMunicipio, String rol) {
         this.numeroIdentificacion = numeroIdentificacion;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -66,23 +67,27 @@ public class UsuarioDTO {
         System.out.println(usr);
     }
 
-    public void logeo() throws ClassNotFoundException, SQLException {
+    public String logeo() throws ClassNotFoundException, SQLException {
         List lista = new ArrayList<>();
         lista = usuario.consultarUsuario(numeroIdentificacion, correo);
+        String retorno = "";
+         System.out.print(lista);
 
         if (lista.isEmpty()) {
             // mensaje no se encontro el usuario
-            System.out.println("No se encuentra");
+            retorno = "No se encuentra";
+            return retorno;
 
         } else if (lista.get(6).equals("ESTUDIANTE")) {
             // ir a vista Estudiante
-            System.out.println("ESTUDIANTE");
+            return retorno = "ESTUDIANTE";
 
-        } else if (lista.get(6).equals("ADMIN")) {
+        } else if (lista.get(6).equals("ADMINISTRADOR")) {
             // ir a vista ADMIN
-            System.out.println("ADMIN");
+             System.out.print("admin");
+            return retorno = "ADMINISTRADOR";
         }
-
+        return retorno;
     }
 
     public void desactivarEstudiante() throws ClassNotFoundException {
