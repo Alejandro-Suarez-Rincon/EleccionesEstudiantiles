@@ -4,16 +4,27 @@
  */
 package view;
 
+import java.security.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.ProcesoElectoralDTO;
+
+
+
 /**
  *
  * @author aleja
  */
 public class AdministradorProcesoElectoral extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Estudiante
-     */
     public AdministradorProcesoElectoral() {
+
         initComponents();
         this.setLocationRelativeTo(null);// Centra la pantalla
         panelActualizar.setVisible(false);
@@ -306,7 +317,7 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
             }
         });
 
-        jLabel13.setText("Fecha Eleccion");
+        jLabel13.setText("Fecha Fin Eleccion");
 
         jLabel15.setText("ID Proceso");
 
@@ -485,15 +496,23 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
     }//GEN-LAST:event_textoFechaFinalizacionActualizarActionPerformed
 
     private void botonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarActionPerformed
-        // TODO add your handling code here:
+        try {
+            actualizarProceso();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorProcesoElectoral.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_botonActualizarActionPerformed
 
     private void botonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultarActionPerformed
-        // TODO add your handling code here:
+        consultarProceso();
     }//GEN-LAST:event_botonConsultarActionPerformed
 
     private void botonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearActionPerformed
-        // TODO add your handling code here:
+        try {
+            crearProceso();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorProcesoElectoral.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_botonCrearActionPerformed
 
     /**
@@ -545,6 +564,78 @@ public class AdministradorProcesoElectoral extends javax.swing.JFrame {
             }
         });
     }
+
+    public void crearProceso() throws ClassNotFoundException {
+        int idProceso = Integer.parseInt(textoIDProceso.getText());
+        String descripcion = textoDescripcion.getText();
+        java.sql.Timestamp fechaEleccion = java.sql.Timestamp.valueOf(textoFecha.getText());
+        java.sql.Timestamp fechaFinalizacion = java.sql.Timestamp.valueOf(textoFechaFinalizacion.getText());
+
+        ProcesoElectoralDTO procesoElectoralDTO = new ProcesoElectoralDTO(idProceso, descripcion, fechaEleccion, "", fechaFinalizacion);
+
+        String mensaje;
+        mensaje = procesoElectoralDTO.crearProceso();
+        JOptionPane.showMessageDialog(null, mensaje);
+
+    }
+
+    public void actualizarProceso() throws ClassNotFoundException {
+        int idProceso = Integer.parseInt(textoIDProcesoActualizar.getText());
+        String descripcion = textoDescripcionActualizar.getText();
+        java.sql.Timestamp fechaEleccion = java.sql.Timestamp.valueOf(textoFechaEleccionActualizar.getText());
+        java.sql.Timestamp fechaFinalizacion = java.sql.Timestamp.valueOf(textoFechaFinalizacionActualizar.getText());
+
+        ProcesoElectoralDTO procesoElectoralDTO = new ProcesoElectoralDTO(idProceso, descripcion, fechaEleccion, "", fechaFinalizacion);
+
+        String mensaje;
+        mensaje = procesoElectoralDTO.actualizarProceso();
+        JOptionPane.showMessageDialog(null, mensaje);
+    }
+    
+    public void consultarProceso(){
+        int idProceso = Integer.valueOf(idProcesoConsulta.getText());
+        ProcesoElectoralDTO procesoElectoralDTO = new ProcesoElectoralDTO(idProceso, "", null, "", null);
+
+        List lista = new ArrayList();
+
+        try {
+            lista = procesoElectoralDTO.consultarProceso();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorProcesoElectoral.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (lista.isEmpty()) {
+            // no se exuentra el proceso
+            JOptionPane.showMessageDialog(null, "No se encuentra el proceso");
+        } else {
+            // enseñar datos
+            
+            JOptionPane.showMessageDialog(null, lista);
+            
+            /*int idProcesoLista = (int) lista.get(0);
+            String nombre = (String) lista.get(1);
+            Timestamp fechaEleccion = (Timestamp) lista.get(2);
+            String fechaCreacionString = (String) lista.get(3);
+            Timestamp fechaFinalizacionTS = (Timestamp) lista.get(4);
+            
+            String fechaEleccionString = convertirTimestampAString(fechaEleccion);
+            String fechaFinalizacionString = convertirTimestampAString(fechaFinalizacionTS);
+            String idProcesoString = String.valueOf(idProcesoLista);
+
+            idFacultadImprimir.setText(idProcesoString);
+            DescripcionImprimir.setText(nombre);
+            fechaImprimir.setText(fechaEleccionString);
+            fechaCreacion.setText(fechaCreacionString);
+            fechaFinalizacion.setText(fechaFinalizacionString);*/
+        }
+    }
+    
+    // Método para convertir un Timestamp a String
+    private static String convertirTimestampAString(Timestamp timestamp) {
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatoFecha.format(timestamp);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Consultar;

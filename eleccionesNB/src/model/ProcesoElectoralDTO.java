@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProcesoElectoralDTO {
+
     // variables
     int idProceso;
     String descripcion;
@@ -27,7 +28,7 @@ public class ProcesoElectoralDTO {
     }
 
     // metodos
-    public void crearProceso() throws ClassNotFoundException {
+    public String crearProceso() throws ClassNotFoundException {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         fechaCreacion = currentDateTime.format(formatter);
@@ -35,36 +36,26 @@ public class ProcesoElectoralDTO {
         boolean crear = proceso.crearProceso(idProceso, descripcion, fechaEleccion, fechaCreacion, fechaFinalizacion);
         if (crear) {
             // vista creado correcto
-            System.out.println("Si");
+            return "Se creo el Proceso";
         } else {
             // vista no creado
-            System.out.println("No");
+            return "No se  pudo crear el proceso";
         }
     }
 
-    public void actualizarProceso() throws ClassNotFoundException {
+    public String actualizarProceso() throws ClassNotFoundException {
         boolean crear = proceso.actualizarProceso(idProceso, descripcion, fechaEleccion, fechaFinalizacion);
         if (crear) {
             // vista actualizada
-            System.out.println("Si");
+            return "Se actualizo el Proceso electoral " + descripcion;
         } else {
             // vista no creado
-            System.out.println("No");
+            return "No se pudo actualizar el proceso";
         }
     }
 
-    public void consultarProceso() throws ClassNotFoundException {
+    public List consultarProceso() throws ClassNotFoundException {
         List lista = new ArrayList();
-        lista = proceso.consultarProceso(idProceso);
-        if (lista.isEmpty()) {
-            // no se exuentra el proceso
-            System.out.println("No se encuentra");
-        } else {
-            // enseñar datos
-            System.out.println(lista);
-        }
-
+        return lista = proceso.consultarProceso(idProceso);
     }
-
-
 }

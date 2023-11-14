@@ -4,15 +4,25 @@
  */
 package view;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import model.FacultadDTO;
+
 /**
  *
  * @author aleja
  */
 public class AdministradorFacultad extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Estudiante
-     */
+    ButtonGroup buttonGroupEstadoCrear = new ButtonGroup();
+    ButtonGroup buttonGroupEstado = new ButtonGroup();
+
     public AdministradorFacultad() {
         initComponents();
         this.setLocationRelativeTo(null);// Centra la pantalla
@@ -256,6 +266,11 @@ public class AdministradorFacultad extends javax.swing.JFrame {
         jLabel11.setText("ID Facultad");
 
         botonActualizar.setText("Actualizar");
+        botonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonActualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelActualizarLayout = new javax.swing.GroupLayout(panelActualizar);
         panelActualizar.setLayout(panelActualizarLayout);
@@ -313,6 +328,11 @@ public class AdministradorFacultad extends javax.swing.JFrame {
         idFacultadConsulta.setToolTipText("");
 
         botonConsultar.setText("Consultar");
+        botonConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonConsultarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelConsultarLayout = new javax.swing.GroupLayout(panelConsultar);
         panelConsultar.setLayout(panelConsultarLayout);
@@ -457,6 +477,11 @@ public class AdministradorFacultad extends javax.swing.JFrame {
 
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
         String seleccion = (String) comboFacultad.getSelectedItem();
+        buttonGroupEstadoCrear.add(radioActivo);
+        buttonGroupEstadoCrear.add(radioInactivo);
+        buttonGroupEstado.add(radioActivo1);
+        buttonGroupEstado.add(radioInactivo1);
+
         if ("Crear".equals(seleccion)) {
             panelActualizar.setVisible(false);
             panelCrear.setVisible(true);
@@ -498,7 +523,21 @@ public class AdministradorFacultad extends javax.swing.JFrame {
     }//GEN-LAST:event_radioInactivoActionPerformed
 
     private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
-        // TODO add your handling code here:
+        int idFacultad = Integer.parseInt(textoFacultad.getText());
+        String nombre = textoNombre.getText();
+        String estado = obtenerSeleccion(buttonGroupEstadoCrear);
+
+        FacultadDTO facultadDTO = new FacultadDTO(idFacultad, nombre, estado);
+
+        try {
+            String mensaje = facultadDTO.crear();
+            JOptionPane.showMessageDialog(null, mensaje);
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorFacultad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_botonRegistrarActionPerformed
 
     private void radioActivo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioActivo1ActionPerformed
@@ -512,6 +551,52 @@ public class AdministradorFacultad extends javax.swing.JFrame {
     private void botonEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEstadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonEstadoActionPerformed
+
+    private void botonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarActionPerformed
+        int idFacultad = Integer.parseInt(textoFacultad1.getText());
+        String nombre = textoNombreActualizar.getText();
+
+        FacultadDTO facultadDTO = new FacultadDTO(idFacultad, nombre, "");
+
+        String mensaje;
+        try {
+            mensaje = facultadDTO.actualizar();
+            JOptionPane.showMessageDialog(null, mensaje);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorFacultad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_botonActualizarActionPerformed
+
+    private void botonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultarActionPerformed
+        int idFacultad = Integer.parseInt(idFacultadConsulta.getText());
+
+        FacultadDTO facultadDTO = new FacultadDTO(idFacultad, "", "");
+        List lista = new ArrayList();
+
+        try {
+            lista = facultadDTO.consultar();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorFacultad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (lista.isEmpty()) {
+            // no se encuentra la facultad
+            JOptionPane.showMessageDialog(null, "No se encuentra la facultad");
+        } else {
+            // facultad encontrada
+            int idFac = (int) lista.get(0);
+            String nombre = (String) lista.get(1);
+            String estado = (String) lista.get(2);
+
+            String idFacultadString = String.valueOf(idFac);
+
+            idFacultadImprimir.setText(idFacultadString);
+            facultadImprimir.setText(nombre);
+            estadoImprimir.setText(estado);
+        }
+    }//GEN-LAST:event_botonConsultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -553,6 +638,18 @@ public class AdministradorFacultad extends javax.swing.JFrame {
                 new AdministradorFacultad().setVisible(true);
             }
         });
+    }
+
+    // Metodos
+    private static String obtenerSeleccion(ButtonGroup group) {
+        Enumeration<AbstractButton> buttons = group.getElements();
+        while (buttons.hasMoreElements()) {
+            AbstractButton radioButton = buttons.nextElement();
+            if (radioButton.isSelected()) {
+                return radioButton.getText();
+            }
+        }
+        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

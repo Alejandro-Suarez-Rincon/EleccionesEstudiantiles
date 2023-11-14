@@ -37,41 +37,27 @@ public class UsuarioDTO {
     }
 
     // Metodos Propios
-    public void registrarEstudiante() throws ClassNotFoundException {
+    public boolean registrarEstudiante() throws ClassNotFoundException {
         // <<rol>> tiene que ser <<ESTUDIANTE>>
-
-        boolean usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
+        boolean usr;
+        return usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
                 estado, rol);
-
-        if (usr) {
-            System.out.println("Si");
-        } else {
-            System.out.println("No");
-        }
-
-        System.out.println(usr);
     }
 
-    public void registrarAdministrador() throws ClassNotFoundException {
+    public boolean registrarAdministrador() throws ClassNotFoundException {
         // <<rol>> tiene que ser <<ADMIN>>
         // <<carrera>> tiene que se <<0>>
-
-        boolean usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
+        boolean usr;
+        return usr = usuario.crearEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo, idCarrera, idMunicipio,
                 estado, rol);
-        if (usr) {
-            System.out.println("Si");
-        } else {
-            System.out.println("No");
-        }
 
-        System.out.println(usr);
     }
 
     public String logeo() throws ClassNotFoundException, SQLException {
         List lista = new ArrayList<>();
         lista = usuario.consultarUsuario(numeroIdentificacion, correo);
         String retorno = "";
-         System.out.print(lista);
+        System.out.print(lista);
 
         if (lista.isEmpty()) {
             // mensaje no se encontro el usuario
@@ -84,36 +70,21 @@ public class UsuarioDTO {
 
         } else if (lista.get(6).equals("ADMINISTRADOR")) {
             // ir a vista ADMIN
-             System.out.print("admin");
+            System.out.print("admin");
             return retorno = "ADMINISTRADOR";
         }
         return retorno;
     }
 
-    public void desactivarEstudiante() throws ClassNotFoundException {
+    public boolean desactivarEstudiante() throws ClassNotFoundException {
         boolean desactivar;
-        desactivar = usuario.desactivarEstudiante(numeroIdentificacion, estado);
-        if (desactivar) {
-            // ir a vista de que si
-            System.out.println("Si");
-        } else {
-            // ir a vista de que no
-            System.out.println("NO");
-        }
+        return desactivar = usuario.desactivarEstudiante(numeroIdentificacion, estado);
     }
 
-    public void actrualizar() throws ClassNotFoundException {
+    public boolean actrualizar() throws ClassNotFoundException {
         boolean actualizar;
-        actualizar = usuario.actualizarEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo,
+        return actualizar = usuario.actualizarEstudiante(numeroIdentificacion, nombre, apellido, correo, numeroTelefonico, sexo,
                 idCarrera, idMunicipio, estado, rol);
-
-        if (actualizar) {
-            // ir a vista de que si
-            System.out.println("Si");
-        } else {
-            // ir a vista de que no
-            System.out.println("NO");
-        }
     }
 
 }

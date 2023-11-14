@@ -4,15 +4,25 @@
  */
 package view;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import model.CarreraDTO;
+
 /**
  *
  * @author aleja
  */
 public class AdministradorCarrera extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Estudiante
-     */
+    ButtonGroup buttonGroupEstadoCrear = new ButtonGroup();
+    ButtonGroup buttonGroupEstado = new ButtonGroup();
+
     public AdministradorCarrera() {
         initComponents();
         this.setLocationRelativeTo(null);// Centra la pantalla
@@ -270,6 +280,11 @@ public class AdministradorCarrera extends javax.swing.JFrame {
         jLabel11.setText("ID Facultad");
 
         botonActualizar.setText("Actualizar");
+        botonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonActualizarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelActualizarLayout = new javax.swing.GroupLayout(panelActualizar);
         panelActualizar.setLayout(panelActualizarLayout);
@@ -337,6 +352,11 @@ public class AdministradorCarrera extends javax.swing.JFrame {
         idCarreraConsulta.setToolTipText("");
 
         botonConsultar.setText("Consultar");
+        botonConsultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonConsultarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelConsultarLayout = new javax.swing.GroupLayout(panelConsultar);
         panelConsultar.setLayout(panelConsultarLayout);
@@ -482,6 +502,12 @@ public class AdministradorCarrera extends javax.swing.JFrame {
 
     private void comboCarreraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboCarreraActionPerformed
         String seleccion = (String) comboCarrera.getSelectedItem();
+
+        buttonGroupEstadoCrear.add(radioActivo);
+        buttonGroupEstadoCrear.add(radioInactivo);
+        buttonGroupEstado.add(radioActivo1);
+        buttonGroupEstado.add(radioInactivo1);
+
         if ("Crear".equals(seleccion)) {
             panelActualizar.setVisible(false);
             panelCarreraCrear.setVisible(true);
@@ -527,7 +553,20 @@ public class AdministradorCarrera extends javax.swing.JFrame {
     }//GEN-LAST:event_radioInactivoActionPerformed
 
     private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
-        // TODO add your handling code here:
+        int idCarrera = Integer.parseInt(textoCarrera.getText());
+        int idFacultad = Integer.parseInt(textoFacultad.getText());
+        String nombre = textoNombre.getText();
+        String estado = obtenerSeleccion(buttonGroupEstadoCrear);
+
+        CarreraDTO carreraDTO = new CarreraDTO(idCarrera, idFacultad, nombre, estado);
+
+        try {
+            String mensaje = carreraDTO.crearCarrera();
+            JOptionPane.showMessageDialog(null, mensaje);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorCarrera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_botonRegistrarActionPerformed
 
     private void radioActivo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioActivo1ActionPerformed
@@ -541,6 +580,53 @@ public class AdministradorCarrera extends javax.swing.JFrame {
     private void botonEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEstadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_botonEstadoActionPerformed
+
+    private void botonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarActionPerformed
+        int idCarrera = Integer.parseInt(textoCarrera1.getText());
+        int idFacultad = Integer.parseInt(textoFacultad1.getText());
+        String nombre = textoNombreActualizar.getText();
+
+        CarreraDTO carreraDTO = new CarreraDTO(idCarrera, idFacultad, nombre, "");
+        try {
+            String mensaje = carreraDTO.actualizarCarrera();
+            JOptionPane.showMessageDialog(null, mensaje);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorCarrera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botonActualizarActionPerformed
+
+    private void botonConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonConsultarActionPerformed
+        int idCarrera = Integer.parseInt(idCarreraConsulta.getText());
+        CarreraDTO carreraDTO = new CarreraDTO(idCarrera, 0, "", "");
+
+        List lista = new ArrayList();
+        try {
+            lista = carreraDTO.consultarCarrera();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorCarrera.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (lista.isEmpty()) {
+            // vista no se encontro nada
+            JOptionPane.showMessageDialog(null, "Carrera no encontrada");
+        } else {
+            // vista carrera encontrada
+            int idCarreraCon = (int) lista.get(0);
+            String nombre = (String) lista.get(1);
+            int idFacultad = (int) lista.get(2);
+            String estado = (String) lista.get(3);
+
+            String idCarreraString = String.valueOf(idCarreraCon);
+            String idFacultadString = String.valueOf(idFacultad);
+
+            idCarreraImprimir.setText(idCarreraString);
+            facultadImprimir.setText(idFacultadString);
+            carreraImprimir.setText(nombre);
+            estadoImprimir.setText(estado);
+
+        }
+
+    }//GEN-LAST:event_botonConsultarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -578,6 +664,18 @@ public class AdministradorCarrera extends javax.swing.JFrame {
                 new AdministradorCarrera().setVisible(true);
             }
         });
+    }
+
+    // Metodos
+    private static String obtenerSeleccion(ButtonGroup group) {
+        Enumeration<AbstractButton> buttons = group.getElements();
+        while (buttons.hasMoreElements()) {
+            AbstractButton radioButton = buttons.nextElement();
+            if (radioButton.isSelected()) {
+                return radioButton.getText();
+            }
+        }
+        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

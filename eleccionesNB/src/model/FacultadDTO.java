@@ -22,39 +22,31 @@ public class FacultadDTO {
     }
 
     // metodos
-    public void crear() throws ClassNotFoundException {
+    public String crear() throws ClassNotFoundException {
         boolean crr = facultad.crearFacultad(idFacultad, nombre, estado);
         if (crr) {
             // vista creada si
-            System.out.println("Si");
+            return "Se creo la facultad";
         } else {
             // vista creada no
-            System.out.println("No");
+            return "No se creo la facultad";
         }
     }
 
-    public void actualizar() throws ClassNotFoundException {
+    public String actualizar() throws ClassNotFoundException {
         boolean actz = facultad.actualizarFacultad(idFacultad, nombre);
         if (actz) {
             // vista actualizada si
-            System.out.println("Si");
+            return "La facultad se Actualizo";
         } else {
             // vista actualizada no
-            System.out.println("No");
+            return "La facultad no se Actualizo";
         }
     }
 
-    public void consultar() throws ClassNotFoundException {
+    public List consultar() throws ClassNotFoundException {
         List lista = new ArrayList<>();
-        lista = facultad.consultarFacultad(idFacultad);
-
-        if (lista.isEmpty()) {
-            // no se encuentra la facultad
-            System.out.println("no se encuentra");
-        } else {
-            // facultad encontrada
-            System.out.println(lista);
-        }
+        return lista = facultad.consultarFacultad(idFacultad);
     }
 
     public void estado() throws ClassNotFoundException {

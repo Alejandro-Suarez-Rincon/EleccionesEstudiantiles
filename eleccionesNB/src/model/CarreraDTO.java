@@ -23,54 +23,50 @@ public class CarreraDTO {
     }
 
     // Metodos
-    public void crearCarrera() throws ClassNotFoundException {
+    public String crearCarrera() throws ClassNotFoundException {
         FacultadDAO facultad = new FacultadDAO();
         List consultar = new ArrayList<>();
         consultar = facultad.consultarFacultad(idFacultad);
 
         if (consultar.isEmpty()) {
             // vista no se encuentra la facultad
-            System.out.println("no se encuentra la facultad");
+            return "no se encuentra la facultad";
         } else if (consultar.get(2).equals("ACTIVA")) {
             // se hace la creacion
             boolean crear = carrera.crearCarrera(idCarrera, idFacultad, nombre, estado);
 
             if (crear) {
                 // vista creada
-                System.out.println("Si");
+                return "Carrera Creada";
             } else {
                 // vista no creada
-                System.out.println("No");
+                return "No se Creo la Carrera";
             }
         } else {
             // vista no se crea por no estar activada la facultad
             System.out.println("facultad no activa");
+            return "Facultad no Activa";
         }
     }
 
-    public void actualizarCarrera() throws ClassNotFoundException {
+    public String actualizarCarrera() throws ClassNotFoundException {
         boolean actualizar = carrera.actualizarCarrera(idCarrera, idFacultad, nombre);
 
         if (actualizar) {
             // vista Actaulizada
-            System.out.println("si");
+            return "Se actualizo Correctamente";
         } else {
             // vista no creada
-            System.out.println("no");
+            return "Carrera No Actualizo";
         }
     }
 
-    public void consultarCarrera() throws ClassNotFoundException {
+    public List consultarCarrera() throws ClassNotFoundException {
         List lista = new ArrayList();
         lista = carrera.consultarCarrera(idCarrera);
-
-        if (lista.isEmpty()) {
-            // vista no se encontro nada
-            System.out.println("carrera no encontrada");
-        } else {
-            // vista carrera encontrada
-            System.out.println(lista);
-        }
+        
+        return lista;
+        
     }
 
     public void estadoCarrera() throws ClassNotFoundException {

@@ -4,15 +4,25 @@
  */
 package view;
 
+import java.util.Enumeration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import model.UsuarioDTO;
+
 /**
  *
  * @author aleja
  */
 public class AdministradorUsuario extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Estudiante
-     */
+    ButtonGroup buttonGroupSexo = new ButtonGroup();
+    ButtonGroup buttonGroupEstado = new ButtonGroup();
+    ButtonGroup buttonGroupRol = new ButtonGroup();
+    ButtonGroup buttonGroupEstadoAct = new ButtonGroup();
+
     public AdministradorUsuario() {
         initComponents();
         this.setLocationRelativeTo(null);// Centra la pantalla
@@ -378,11 +388,21 @@ public class AdministradorUsuario extends javax.swing.JFrame {
 
     private void comboEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEstudianteActionPerformed
         String seleccion = (String) comboEstudiante.getSelectedItem();
+        buttonGroupSexo.add(radioMasculino);
+        buttonGroupSexo.add(radioFemenino);
+        buttonGroupEstado.add(radioActivo);
+        buttonGroupEstado.add(radioInactivo);
+        buttonGroupRol.add(radioAdministrador);
+        buttonGroupRol.add(radioEstudiante);
+        buttonGroupEstadoAct.add(radioActivo1);
+        buttonGroupEstadoAct.add(radioInactivo1);
+
         if ("Actualizar".equals(seleccion)) {
             panelEstudianteActualizar.setVisible(true);
             panelEstado.setVisible(false);
             botonActualizar.setVisible(true);
             botonRegistrar.setVisible(false);
+
         } else if ("Registrar".equals(seleccion)) {
             panelEstudianteActualizar.setVisible(true);
             panelEstado.setVisible(false);
@@ -404,7 +424,7 @@ public class AdministradorUsuario extends javax.swing.JFrame {
             administradorCarrera.setVisible(true);
             this.setVisible(false);
         }
-        
+
     }//GEN-LAST:event_comboCarreraActionPerformed
 
     private void comboFacultadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboFacultadActionPerformed
@@ -432,11 +452,70 @@ public class AdministradorUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_radioInactivoActionPerformed
 
     private void botonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRegistrarActionPerformed
-        // TODO add your handling code here:
+        int cedula = Integer.parseInt(textoCedula.getText());
+        String nombre = textoNombre.getText();
+        String apellido = textoApellido.getText();
+        String correo = textoCorreo.getText();
+        int numero = Integer.parseInt(textoTelefono.getText());
+        String sexo = obtenerSeleccion(buttonGroupSexo);
+        String estado = obtenerSeleccion(buttonGroupEstado);
+        int idCarrera = Integer.parseInt(textoIdCarrera.getText());
+        int idMunicipio = Integer.parseInt(textoIdMunicipio.getText());
+        String rol = obtenerSeleccion(buttonGroupRol);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(cedula, nombre, apellido, correo, numero, sexo, estado, idCarrera, idMunicipio, rol);
+
+        if ("ESTUDIANTE".equals(nombre)) {
+            try {
+                boolean usr = usuarioDTO.registrarEstudiante();
+                if (usr) {
+                    JOptionPane.showMessageDialog(null, "Estudiante Creado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Estudiante No Creado");
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AdministradorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            try {
+                boolean usr = usuarioDTO.registrarAdministrador();
+                if (usr) {
+                    JOptionPane.showMessageDialog(null, "Administrador Creado");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Administrador No Creado");
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(AdministradorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_botonRegistrarActionPerformed
 
     private void botonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarActionPerformed
-        // TODO add your handling code here:
+        int cedula = Integer.parseInt(textoCedula.getText());
+        String nombre = textoNombre.getText();
+        String apellido = textoApellido.getText();
+        String correo = textoCorreo.getText();
+        int numero = Integer.parseInt(textoTelefono.getText());
+        String sexo = obtenerSeleccion(buttonGroupSexo);
+        String estado = obtenerSeleccion(buttonGroupEstado);
+        int idCarrera = Integer.parseInt(textoIdCarrera.getText());
+        int idMunicipio = Integer.parseInt(textoIdMunicipio.getText());
+        String rol = obtenerSeleccion(buttonGroupRol);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(cedula, nombre, apellido, correo, numero, sexo, estado, idCarrera, idMunicipio, rol);
+        try {
+
+            boolean actualizar = usuarioDTO.actrualizar();
+            if (actualizar) {
+                // ir a vista de que si
+                JOptionPane.showMessageDialog(null, "Actualizado");
+            } else {
+                // ir a vista de que no
+                JOptionPane.showMessageDialog(null, "No Actualizado");
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_botonActualizarActionPerformed
 
     private void radioActivo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radioActivo1ActionPerformed
@@ -448,7 +527,25 @@ public class AdministradorUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_radioInactivo1ActionPerformed
 
     private void botonEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEstadoActionPerformed
-        // TODO add your handling code here:
+
+        String estado = obtenerSeleccion(buttonGroupEstado);
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO(0, "", "", "", 0, "", estado, 0, 0, "");
+        boolean desactivar;
+        try {
+            desactivar = usuarioDTO.desactivarEstudiante();
+            if (desactivar) {
+                // ir a vista de que si
+                JOptionPane.showMessageDialog(null, "Actualizado");
+            } else {
+                // ir a vista de que no
+                JOptionPane.showMessageDialog(null, "No se cambio el Estado");
+            }
+
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AdministradorUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_botonEstadoActionPerformed
 
     /**
@@ -488,6 +585,19 @@ public class AdministradorUsuario extends javax.swing.JFrame {
             }
         });
     }
+
+    // Metodos
+    private static String obtenerSeleccion(ButtonGroup group) {
+        Enumeration<AbstractButton> buttons = group.getElements();
+        while (buttons.hasMoreElements()) {
+            AbstractButton radioButton = buttons.nextElement();
+            if (radioButton.isSelected()) {
+                return radioButton.getText();
+            }
+        }
+        return null;
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonActualizar;
